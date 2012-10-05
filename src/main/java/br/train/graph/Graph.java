@@ -45,7 +45,7 @@ public class Graph {
        return String.valueOf(total);
    }
 
-    public String getTrips(Vertex ... route) {
+    public String getTrips(Vertex ... route) throws CloneNotSupportedException {
 
         Vertex start = route[0];
         Vertex target = route[1];
@@ -62,6 +62,7 @@ public class Graph {
         LinkedList<Vertex> routeGuess = new LinkedList<Vertex>();
         Map<Integer, LinkedList<Vertex>> result = new HashMap<Integer, LinkedList<Vertex>>();
 
+        Vertex later = null;
         int i = 0;
         while (!stack.empty()) {
             Vertex popVertex = stack.pop();
@@ -69,9 +70,14 @@ public class Graph {
             popVertex.setColor(grey);
 
                 if (popVertex.equals(target) && start.getColor() != grey){
+                    LinkedList<Vertex> clone = (LinkedList<Vertex>)routeGuess.clone();
 
-                    result.put(i++, routeGuess);
-
+                    result.put(i++, clone);
+                    for (Vertex guess : routeGuess) {
+                        guess.setColor(white);
+                    }
+                    routeGuess.clear();
+                    continue;
                 }
             for (Vertex v : adjList.get(popVertex)) {
                 if (v.getColor() == white){

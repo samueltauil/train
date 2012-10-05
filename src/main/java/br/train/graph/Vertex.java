@@ -48,9 +48,9 @@ public class Vertex {
         final StringBuffer sb = new StringBuffer();
         sb.append("Vertex");
         sb.append("{value='").append(value).append('\'');
-        sb.append(", distance=").append(distance);
-        sb.append(", explored=").append(explored);
-        sb.append(", color=").append(color);
+//        sb.append(", distance=").append(distance);
+//        sb.append(", explored=").append(explored);
+//        sb.append(", color=").append(color);
         sb.append('}');
         return sb.toString();
     }
