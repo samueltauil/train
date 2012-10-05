@@ -1,6 +1,7 @@
 package br.train.graph;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Stack;
 
@@ -48,17 +49,38 @@ public class Graph {
 
         Vertex start = route[0];
         Vertex target = route[1];
+
+        int white = 0;
+        int grey = 1;
+        int black = 2;
         
         Map<Vertex, Vertex[]> adjList = getAdjList();
 
+        Stack<Vertex> stack = new Stack<Vertex>();
+        stack.push(start);
 
-        return null;
+        LinkedList<Vertex> routeGuess = new LinkedList<Vertex>();
+        Map<Integer, LinkedList<Vertex>> result = new HashMap<Integer, LinkedList<Vertex>>();
+
+        int i = 0;
+        while (!stack.empty()) {
+            Vertex popVertex = stack.pop();
+            routeGuess.add(popVertex);
+            popVertex.setColor(grey);
+
+                if (popVertex.equals(target) && start.getColor() != grey){
+
+                    result.put(i++, routeGuess);
+
+                }
+            for (Vertex v : adjList.get(popVertex)) {
+                if (v.getColor() == white){
+                       stack.push(v);
+                }
+            }
+            popVertex.setColor(black);
+        }
+        return result.toString();
     }
-
-    public Vertex[] visit(Vertex root) {
-        Vertex[] vertexes = getAdjList().get(root);
-        return vertexes;
-    }
-
 
 }
