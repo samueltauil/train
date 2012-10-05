@@ -62,7 +62,6 @@ public class Graph {
         LinkedList<Vertex> routeGuess = new LinkedList<Vertex>();
         Map<Integer, LinkedList<Vertex>> result = new HashMap<Integer, LinkedList<Vertex>>();
 
-        Vertex later = null;
         int i = 0;
         while (!stack.empty()) {
             Vertex popVertex = stack.pop();
@@ -85,6 +84,7 @@ public class Graph {
                 }
             }
             popVertex.setColor(black);
+            start = stack.get(0);
         }
         return result.toString();
     }
