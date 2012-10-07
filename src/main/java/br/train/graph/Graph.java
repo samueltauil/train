@@ -43,6 +43,70 @@ public class Graph {
        return String.valueOf(total);
    }
 
+    //not working
+    public String getTripsEqual(int stops, Vertex ... route) throws CloneNotSupportedException {
+
+        Vertex start = route[0];
+        Vertex target = route[1];
+
+        int white = 0;
+        int grey = 1;
+        int black = 2;
+        int counter = 0;
+
+        Map<Vertex, Vertex[]> adjList = getAdjList();
+
+        Stack<Vertex> stack = new Stack<Vertex>();
+        stack.push(start);
+
+        LinkedList<Vertex> later = new LinkedList<Vertex>();    //backtracking before last popped stack vertex
+
+        LinkedList<Vertex> routeGuess = new LinkedList<Vertex>();
+        Map<Integer, LinkedList<Vertex>> result = new HashMap<Integer, LinkedList<Vertex>>();
+
+        int i = 0;
+        while (!stack.empty()) {
+            Vertex popVertex = stack.pop();
+            popVertex.setColor(grey);
+
+            if (popVertex.equals(target)  ){
+                routeGuess.addAll(0, later);
+            }
+            routeGuess.add(popVertex);
+            counter++;
+
+            if (popVertex.equals(target)){
+
+                LinkedList<Vertex> clone = (LinkedList<Vertex>)routeGuess.clone(); //cloning to avoid reference color change
+                later.add(routeGuess.get(i));
+
+                for (Vertex guess : routeGuess) {
+                    guess.setColor(white);
+                }
+                result.put(i++, clone);
+                routeGuess.clear();
+                continue;
+            }
+
+            for (Vertex v : adjList.get(popVertex)) {
+                if (v.getColor() == white){
+                    stack.push(v);
+                }
+            }
+            popVertex.setColor(black);
+        }
+
+        int solution = 0;
+
+        for (LinkedList<Vertex> vertexes : result.values()) {
+            if (vertexes.size() == stops + 1 ) {
+                solution++;
+            }
+        }
+        return String.valueOf(solution);
+    }
+
+
     public String getTripsMax(int stops, Vertex ... route) throws CloneNotSupportedException {
 
         Vertex start = route[0];
@@ -68,7 +132,7 @@ public class Graph {
             popVertex.setColor(grey);
 
             if (popVertex.equals(target) && start.getColor() != grey){
-                    routeGuess.addAll(0, later);
+                    routeGuess.addAll(0, later);         //this not works for exercise seven cause doesn't support repeated vertexes
             }
             routeGuess.add(popVertex);
 

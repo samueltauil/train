@@ -44,5 +44,8 @@ public class Main {
 
         Vertex[] exerciseSix = new Vertex[] { C, C };
         System.out.println( g.getTripsMax(3, exerciseSix));
+
+//        Vertex[] exerciseSeven = new Vertex[] { A, C };
+//        System.out.println( g.getTripsEqual(4, exerciseSeven));
     }
 }
