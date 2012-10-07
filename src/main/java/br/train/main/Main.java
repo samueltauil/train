@@ -43,6 +43,6 @@ public class Main {
         System.out.println( g.getDistance(exerciseFive) );
 
         Vertex[] exerciseSix = new Vertex[] { C, C };
-        System.out.println( g.getTrips(exerciseSix));
+        System.out.println( g.getTripsMax(3, exerciseSix));
     }
 }

@@ -1,9 +1,7 @@
 package br.train.graph;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
+import java.util.concurrent.DelayQueue;
 
 /**
  * User: samuel (Samuel Tauil)
@@ -45,7 +43,7 @@ public class Graph {
        return String.valueOf(total);
    }
 
-    public String getTrips(Vertex ... route) throws CloneNotSupportedException {
+    public String getTripsMax(int stops, Vertex ... route) throws CloneNotSupportedException {
 
         Vertex start = route[0];
         Vertex target = route[1];
@@ -53,11 +51,13 @@ public class Graph {
         int white = 0;
         int grey = 1;
         int black = 2;
-        
+
         Map<Vertex, Vertex[]> adjList = getAdjList();
 
         Stack<Vertex> stack = new Stack<Vertex>();
         stack.push(start);
+
+        LinkedList<Vertex> later = new LinkedList<Vertex>();    //backtracking before last popped stack vertex
 
         LinkedList<Vertex> routeGuess = new LinkedList<Vertex>();
         Map<Integer, LinkedList<Vertex>> result = new HashMap<Integer, LinkedList<Vertex>>();
@@ -65,16 +65,23 @@ public class Graph {
         int i = 0;
         while (!stack.empty()) {
             Vertex popVertex = stack.pop();
-            routeGuess.add(popVertex);
             popVertex.setColor(grey);
 
-                if (popVertex.equals(target) && start.getColor() != grey){
-                    LinkedList<Vertex> clone = (LinkedList<Vertex>)routeGuess.clone();
+            if (popVertex.equals(target) && start.getColor() != grey){
+                    routeGuess.addAll(0, later);
+            }
+            routeGuess.add(popVertex);
 
-                    result.put(i++, clone);
+
+                if (popVertex.equals(target) && start.getColor() != grey){
+
+                    LinkedList<Vertex> clone = (LinkedList<Vertex>)routeGuess.clone(); //cloning to avoid reference color change
+                    later.add(routeGuess.get(i));
+
                     for (Vertex guess : routeGuess) {
                         guess.setColor(white);
                     }
+                    result.put(i++, clone);
                     routeGuess.clear();
                     continue;
                 }
@@ -84,9 +91,16 @@ public class Graph {
                 }
             }
             popVertex.setColor(black);
-            start = stack.get(0);
         }
-        return result.toString();
+
+        int solution = 0;
+
+        for (LinkedList<Vertex> vertexes : result.values()) {
+            if (vertexes.size() <= stops + 1) {
+                solution++;
+            }
+        }
+        return String.valueOf(solution);
     }
 
 }
